@@ -1,50 +1,18 @@
-import React, { useState } from "react";
+import React from 'react';
+import MapComponent from './MapComponent'; // 🧠 Import your new map
+import './App.css';
 
 function App() {
-  const [requests, setRequests] = useState([]);
-  const [name, setName] = useState("");
-  const [location, setLocation] = useState("");
-
-  const addRequest = () => {
-    if (name && location) {
-      setRequests([...requests, { name, location }]);
-      setName("");
-      setLocation("");
-    }
-  };
-
   return (
-    <div style={{ padding: 20, fontFamily: "Arial" }}>
-      <h1>🚨 Help Request Map</h1>
+    <div className="App" style={{ padding: '20px', fontFamily: 'Arial' }}>
+      <h1>🚑 HelpNet App</h1>
+      <p>Welcome! This app helps coordinate real-time disaster support.</p>
+      <p>Here’s a real-time map for better coordination:</p>
 
-      <div style={{ marginBottom: 20 }}>
-        <input
-          type="text"
-          placeholder="Your name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          style={{ marginRight: 10, padding: 5 }}
-        />
-        <input
-          type="text"
-          placeholder="Your location"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          style={{ marginRight: 10, padding: 5 }}
-        />
-        <button onClick={addRequest} style={{ padding: 5 }}>
-          Request Help
-        </button>
-      </div>
+      {/* 🗺️ Show the map */}
+      <MapComponent />
 
-      <h3>📍 Active Requests</h3>
-      <ul>
-        {requests.map((req, i) => (
-          <li key={i}>
-            <strong>{req.name}</strong> needs help at <em>{req.location}</em>
-          </li>
-        ))}
-      </ul>
+      <p style={{ marginTop: '20px' }}>More features coming soon...</p>
     </div>
   );
 }
