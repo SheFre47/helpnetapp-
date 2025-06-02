@@ -1,12 +1,9 @@
 import React from 'react';
 import MapComponent from './MapComponent';
-import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <h1>🌍 HelpNet App</h1>
-      <p>Real-time help requests map</p>
+    <div style={{ height: '100vh', width: '100%' }}>
       <MapComponent />
     </div>
   );
