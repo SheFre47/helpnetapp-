@@ -1,5 +1,7 @@
-import { MapContainer, TileLayer } from 'react-leaflet';
+import React from 'react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import helpRequests from './HelpRequests';
 
 function MapComponent() {
   return (
@@ -11,6 +13,14 @@ function MapComponent() {
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      {helpRequests.map((request) => (
+        <Marker key={request.id} position={request.position}>
+          <Popup>
+            <strong>{request.name}</strong><br />
+            {request.description}
+          </Popup>
+        </Marker>
+      ))}
     </MapContainer>
   );
 }
