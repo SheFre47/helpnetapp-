@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MapComponent from './MapComponent';
+import HelpForm from './HelpForm';
 
 function App() {
+  const [requests, setRequests] = useState([]);
+
+  const addRequest = (newRequest) => {
+    setRequests([...requests, newRequest]);
+  };
+
   return (
-    <div style={{ height: '100vh', width: '100%' }}>
-      <MapComponent />
+    <div>
+      <HelpForm onAdd={addRequest} />
+      <MapComponent helpRequests={requests} />
     </div>
   );
 }
