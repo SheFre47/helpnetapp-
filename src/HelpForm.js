@@ -9,12 +9,17 @@ function HelpForm({ onAdd }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!name || !description || !lat || !lng) return;
-    onAdd({
+
+    const newHelpRequest = {
       id: Date.now(),
       name,
       description,
       position: [parseFloat(lat), parseFloat(lng)],
-    });
+    };
+
+    onAdd(newHelpRequest);
+
+    // Reset form
     setName('');
     setDescription('');
     setLat('');
@@ -22,8 +27,8 @@ function HelpForm({ onAdd }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ padding: '10px', background: '#f0f0f0' }}>
-      <h3>Submit a Help Request</h3>
+    <form onSubmit={handleSubmit} style={{ padding: '10px', background: '#f9f9f9' }}>
+      <h3>Submit Help Request</h3>
       <input placeholder="Your Name" value={name} onChange={(e) => setName(e.target.value)} /><br />
       <input placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} /><br />
       <input placeholder="Latitude" value={lat} onChange={(e) => setLat(e.target.value)} /><br />
