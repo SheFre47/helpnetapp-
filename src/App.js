@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import HelpForm from './HelpForm';
 import MapComponent from './MapComponent';
+import HelpRequestForm from './HelpRequestForm';
 
 function App() {
-  const [requests, setRequests] = useState([]);
+  const [helpRequests, setHelpRequests] = useState([]);
 
-  const addRequest = (newRequest) => {
-    setRequests([...requests, newRequest]);
+  const addHelpRequest = (newRequest) => {
+    setHelpRequests([...helpRequests, newRequest]);
   };
 
   return (
     <div>
-      <HelpForm onAdd={addRequest} />
-      <MapComponent helpRequests={requests} />
+      <HelpRequestForm onAddRequest={addHelpRequest} />
+      <MapComponent helpRequests={helpRequests} />
     </div>
   );
 }
