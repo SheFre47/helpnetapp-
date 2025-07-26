@@ -1,46 +1,61 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from "react";
 
-function HelpRequestForm({ onAddRequest }) {
-  const [formData, setFormData] = useState({
-    name: '',
-    message: '',
-    latitude: '',
-    longitude: '',
-  });
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      setFormData((prev) => ({
-        ...prev,
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      }));
-    });
-  }, []);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+const HelpRequestForm = ({ onAddRequest }) => {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [position, setPosition] = useState([null, null]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onAddRequest(formData);
-    setFormData((prev) => ({
-      ...prev,
-      name: '',
-      message: '',
-    }));
+    if (!name || !description || !position[0]) return;
+
+    const newRequest = {
+      id: Date.now(),
+      name,
+      description,
+      position,
+    };
+
+    onAddRequest(newRequest);
+    setName("");
+    setDescription("");
   };
 
+  // Auto-detect location
+  React.useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setPosition([pos.coords.latitude, pos.coords.longitude]);
+        },
+        (err) => {
+          console.error("Location error:", err.message);
+        }
+      );
+    }
+  }, []);
+
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Submit Help Request</h2>
-      <input name="name" placeholder="Your name" value={formData.name} onChange={handleChange} required />
-      <input name="message" placeholder="Your message" value={formData.message} onChange={handleChange} required />
-      <button type="submit">Send Request</button>
+    <form onSubmit={handleSubmit} style={{ marginBottom: "20px" }}>
+      <h3>Submit Help Request</h3>
+      <input
+        type="text"
+        placeholder="Your Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+      />
+      <br />
+      <textarea
+        placeholder="What do you need?"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        required
+      />
+      <br />
+      <button type="submit">Submit Request</button>
     </form>
   );
-}
+};
 
 export default HelpRequestForm;
