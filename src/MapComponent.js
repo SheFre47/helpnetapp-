@@ -1,33 +1,49 @@
-import React from 'react';
+// src/MapComponent.js
+import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
-delete L.Icon.Default.prototype._getIconUrl;
-
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+const customIcon = new L.Icon({
+  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
 });
 
-function MapComponent({ helpRequests }) {
+export default function MapComponent() {
+  const [helpRequests, setHelpRequests] = useState([]);
+
+  useEffect(() => {
+    fetch('/api/getHelpRequests')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setHelpRequests(data.data);
+        }
+      })
+      .catch(err => console.error('Error loading help requests:', err));
+  }, []);
+
   return (
-    <MapContainer center={[-26.2041, 28.0473]} zoom={11} style={{ height: '500px', width: '100%' }}>
+    <MapContainer center={[-26.2041, 28.0473]} zoom={10} style={{ height: '500px', width: '100%' }}>
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution="&copy; OpenStreetMap contributors"
       />
-      {helpRequests.map((req, index) => (
-        <Marker key={index} position={[req.latitude, req.longitude]}>
+
+      {helpRequests.map((request, index) => (
+        <Marker
+          key={index}
+          position={[request.latitude, request.longitude]}
+          icon={customIcon}
+        >
           <Popup>
-            <strong>{req.name}</strong><br />
-            {req.message}
+            <strong>{request.name}</strong><br />
+            {request.description}
           </Popup>
         </Marker>
       ))}
     </MapContainer>
   );
-}
-
-export default MapComponent;
+                                                     }
