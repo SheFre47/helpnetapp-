@@ -1,4 +1,7 @@
-import clientPromise from '@/lib/mongodb';
+// src/pages/api/get-help-requests.js
+
+import dbConnect from '../../lib/mongodb';
+import HelpRequest from '../../models/HelpRequest';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -6,14 +9,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    const client = await clientPromise;
-    const db = client.db('helpnet');
-    const collection = db.collection('requests');
-
-    const data = await collection.find({}).toArray();
-    res.status(200).json({ success: true, data });
+    await dbConnect();
+    const helpRequests = await HelpRequest.find({});
+    return res.status(200).json({ success: true, data: helpRequests });
   } catch (error) {
     console.error('Error fetching help requests:', error);
-    res.status(500).json({ success: false, message: 'Failed to fetch help requests' });
+    return res.status(500).json({ success: false, message: 'Server error' });
   }
 }
